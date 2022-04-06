@@ -1,12 +1,9 @@
 package httpserver
 
 import (
-	"context"
-	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
 // Response struct
@@ -54,11 +51,31 @@ func ResponseBadRequest(c *gin.Context, err interface{}) {
 	})
 }
 
-// ResponseNotFound returns 400
+// ResponseNotFound returns 404
 func ResponseNotFound(c *gin.Context, err interface{}) {
-	c.JSON(http.StatusBadRequest, ResponseResult{
+	c.JSON(http.StatusNotFound, ResponseResult{
 		Code:  http.StatusNotFound,
 		Msg:   ResponseMsg(http.StatusNotFound),
+		Data:  nil,
+		Error: err,
+	})
+}
+
+// ResponseUnauthorized returns 401
+func ResponseUnauthorized(c *gin.Context, err interface{}) {
+	c.JSON(http.StatusUnauthorized, ResponseResult{
+		Code:  http.StatusUnauthorized,
+		Msg:   ResponseMsg(http.StatusUnauthorized),
+		Data:  nil,
+		Error: err,
+	})
+}
+
+// ResponseForbidden returns 403
+func ResponseForbidden(c *gin.Context, err interface{}) {
+	c.JSON(http.StatusForbidden, ResponseResult{
+		Code:  http.StatusForbidden,
+		Msg:   ResponseMsg(http.StatusForbidden),
 		Data:  nil,
 		Error: err,
 	})
@@ -82,16 +99,4 @@ func ResponseCustomError(c *gin.Context, code int, err interface{}) {
 		Data:  nil,
 		Error: err,
 	})
-}
-
-func HandleError(c *gin.Context, err error) {
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		ResponseNotFound(c, err.Error())
-		return
-	}
-	if errors.Is(err, context.Canceled) || errors.Is(err, context.DeadlineExceeded) {
-		ResponseCustomError(c, http.StatusGatewayTimeout, err.Error())
-		return
-	}
-	ResponseServerError(c, err.Error())
 }
