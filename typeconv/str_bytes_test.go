@@ -23,5 +23,5 @@ func getHelloSlice() []byte {
 	x[2] = 'l'
 	x[3] = 'l'
 	x[4] = 'o'
-	return StringToBytes(string(x))
+	return ForceStringToBytes(string(x))
 }

@@ -26,6 +26,11 @@ func StringToBytes(s string) []byte {
 	))
 }
 
+// ForceStrigToBytes converts string to byte by type conversion
+func ForceStringToBytes(s string) []byte {
+	return *(*[]byte)(unsafe.Pointer(&s))
+}
+
 // ReflectStringToBytes converts string to byte slice by reflect.SliceHeader & reflect.StringHeader
 func ReflectStringToBytes(s string) []byte {
 	var b []byte
