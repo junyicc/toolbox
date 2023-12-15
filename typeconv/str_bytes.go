@@ -5,6 +5,14 @@ import (
 	"unsafe"
 )
 
+func UnsafeStringToBytes(s string) []byte {
+	return unsafe.Slice(unsafe.StringData(s), len(s))
+}
+
+func UnsafeBytesToString(b []byte) string {
+	return unsafe.String(unsafe.SliceData(b), len(b))
+}
+
 // Deprecated: cannot return determined []byte when gc happens
 // func StringToBytes(s string) []byte {
 // 	strPtr := (*[2]uintptr)(unsafe.Pointer(&s))
