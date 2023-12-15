@@ -73,3 +73,19 @@ func CopyFile(src, dest string) error {
 	_, err = io.Copy(destination, source)
 	return err
 }
+
+func IsDir(path string) (bool, error) {
+	fi, err := os.Stat(path)
+	if err != nil {
+		return false, err
+	}
+	return fi.Mode().IsDir(), nil
+}
+
+func IsFile(path string) (bool, error) {
+	fi, err := os.Stat(path)
+	if err != nil {
+		return false, err
+	}
+	return fi.Mode().IsRegular(), nil
+}
